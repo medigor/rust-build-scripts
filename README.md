@@ -11,6 +11,11 @@ RUSTFLAGS='-C target-cpu=x86-64-v3' cargo build --release
 ```powershell
 $env:RUSTFLAGS="-C target-cpu=x86-64-v3"; cargo build --release
 ```
+для `msvc` рекомендую статически линковать CRT(C runtime):
+```powershell
+$env:RUSTFLAGS="-C target-cpu=x86-64-v3 -C target-feature=+crt-static"; cargo build --release
+```
+
 Если планируется запускать на этом же компьютере, то тогда можно изменить таргет на: `target-cpu=native`. Если же планируется запускать на старом процессоре, то: `target-cpu=x86-64-v2`, либо можно выбрать конкретную архитектуру: `target-cpu=skylake`. Список всех таргетов см. с помощью команды: `rustc --print target-cpus`.
 
 При сборке на линукс нужно иметь ввиду, что собранная программа не сможет запуститься на более старой ОС, а точнее с более старой версией glibc (проверить можно командой `ldd --version`). В таком случае, лучше выполнить сборку в контейнере, см. инструкцию дальше.
